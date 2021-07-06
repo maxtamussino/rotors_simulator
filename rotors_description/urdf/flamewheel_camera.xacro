@@ -1,0 +1,39 @@
+<robot name="flamewheel" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Instantiate flamewheel -->
+  <xacro:include filename="$(find rotors_description)/urdf/flamewheel_base.xacro" />
+
+  <xacro:property name="frame_rate" value="30.0" />
+  <xacro:property name="camera_pitch" value="${pi/10}" />
+  <xacro:property name="camera_z" value="-0.05" />
+  <xacro:property name="arm_width" value="0.01" />
+  <xacro:property name="arm_mass" value="0.001" />
+  <xacro:property name="arm_len" value="0.05" />
+
+  <joint name="${namespace}/camera_joint" type="fixed">
+    <origin xyz="0 0 ${camera_z}" rpy="0 0 0" />
+    <parent link="${namespace}/base_link" />
+    <child link="${namespace}/camera_link" />
+  </joint>
+
+  <link name="${namespace}/camera_link" />
+
+  <xacro:camera_macro
+    namespace="${namespace}"
+    parent_link="${namespace}/camera_link"
+    camera_suffix="main"
+    frame_rate="${frame_rate}"
+    horizontal_fov="2"
+    image_width="752"
+    image_height="480"
+    image_format="L8"
+    min_distance="0.02"
+    max_distance="50"
+    noise_mean="0.0"
+    noise_stddev="0.007"
+    enable_visual="true">
+    <box size="0.02 0.03 0.01" />
+    <origin xyz="0 0 0" rpy="0 ${camera_pitch} 0" />
+  </xacro:camera_macro>
+
+</robot>
